@@ -6,7 +6,10 @@ from store.models import Product
 
 # Create your views here.
 def basket_summary(request):
-    context = {}
+    basket = Basket(request)
+    context = {
+        'basket': basket
+    }
     return render(request, 'store/basket/summary.html', context)
 
 
@@ -20,3 +23,5 @@ def basket_add(request):
         basket_qty = basket.__len__()
         response = JsonResponse({ 'qty': basket_qty })
         return response 
+    
+    
