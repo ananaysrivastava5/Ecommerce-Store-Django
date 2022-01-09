@@ -64,6 +64,7 @@ def dashboard(request):
     return render(request, 'account/user/dashboard.html')
 
 
+
 @login_required
 def edit_details(request):
     if request.method == 'POST':
@@ -77,3 +78,13 @@ def edit_details(request):
         'user_form': user_form
     }
     return render(request, 'account/user/edit_details.html', context)
+
+
+
+@login_required
+def delete_user(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect('account:delete_confirmation')
