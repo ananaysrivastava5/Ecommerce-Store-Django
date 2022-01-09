@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import UserBase
 from .tokens import account_activation_token
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserEditForm
 
 
 
@@ -62,3 +62,18 @@ def account_activate(request, uidb64, token):
 @login_required
 def dashboard(request):
     return render(request, 'account/user/dashboard.html')
+
+
+@login_required
+def edit_details(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+    
+    context = {
+        'user_form': user_form
+    }
+    return render(request, 'account/user/edit_details.html', context)
